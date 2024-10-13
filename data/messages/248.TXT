@@ -1,0 +1,2 @@
+Go east ten times.  If that doesn't get you out, then go south, then
+west twice, then south.

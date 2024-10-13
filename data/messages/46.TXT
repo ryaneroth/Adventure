@@ -1,0 +1,1 @@
+Attacking the snake both doesn't work and is very dangerous.

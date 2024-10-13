@@ -1,7 +1,7 @@
 # ca65 -g -l clock.lst clock.s
 # ld65 -t none -vm -m clock.map  -o clock.bin clock.o
 
-# papertape 
+# papertape
 # srec_cat -line-length 41 clock.bin -Binary -offset 0x2000 -o clock.ptp -MOS_Technologies
 
 PROGRAM = adventure
@@ -21,6 +21,10 @@ clean:
 	$(RM) *.o *.lst *.map *.bin *.ptp
 
 flash:
-	minipro -p AT28C256 -w $(PROGRAM).bin -s
+	minipro -p AT28C64B -w $(PROGRAM).bin -s
 
 distclean: clean
+
+text:
+	$(RM) -r data/*
+	python3 export.py

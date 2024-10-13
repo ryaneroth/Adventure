@@ -1,0 +1,29 @@
+I know of places, actions, and things.  Most of my vocabulary
+describes places and is used to move you there.  To move, try words
+like forest, building, downstream, enter, east, west, north, south,
+up, or down.  I know about a few special objects, like a black rod
+hidden in the cave.  These objects can be manipulated using some of
+the action words that I know.  Usually you will need to give both the
+object and action words (in either order), but sometimes I can infer
+the object from the verb alone.  Some objects also imply verbs; in
+particular, "inventory" implies "take inventory", which causes me to
+give you a list of what you're carrying.  Some objects have unexpected
+effects; the effects are not always desirable!  Usually people having
+trouble moving just need to try a few more words.  Usually people
+trying unsuccessfully to manipulate an object are attempting something
+beyond their (or my!) capabilities and should try a completely
+different tack.  One point often confusing to beginners is that, when
+there are several ways to go in a certain direction (e.g., if there
+are several holes in a wall), choosing that direction in effect
+chooses one of the ways at random; often, though, by specifying the
+place you want to reach you can guarantee choosing the right path.
+Also, to speed the game you can sometimes move long distances with a
+single word.  For example, "building" usually gets you to the building
+from anywhere above ground except when lost in the forest.  Also, note
+that cave passages and forest paths turn a lot, so leaving one place
+heading north doesn't guarantee entering the next from the south.
+However (another important point), except when you've used a "long
+distance" word such as "building", there is always a way to go back
+where you just came from unless I warn you to the contrary, even
+though the direction that takes you back might not be the reverse of
+what got you here.  Good luck, and have fun!

@@ -1,0 +1,2 @@
+This adventure is already over.  To start a new adventure, or to
+resume an earlier adventure, please run a fresh copy of the program.

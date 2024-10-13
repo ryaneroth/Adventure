@@ -1,0 +1,1 @@
+You scored %3 out of a possible %3, using%5 turn%S.

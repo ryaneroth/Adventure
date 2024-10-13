@@ -1,0 +1,1 @@
+You have garnered %3 out of a possible %3 points, using %5 turn%S.

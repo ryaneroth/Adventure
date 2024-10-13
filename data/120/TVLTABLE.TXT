@@ -1,0 +1,4 @@
+NORTH 69
+N 69
+EAST 74
+E 74

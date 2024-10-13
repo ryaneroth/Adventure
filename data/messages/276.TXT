@@ -1,0 +1,2 @@
+You don't have to say "go" every time; just specify a direction or, if
+it's nearby, name the place to which you wish to move.

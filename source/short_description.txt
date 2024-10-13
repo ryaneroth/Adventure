@@ -1,0 +1,77 @@
+1	You're in front of building.
+2	You're at hill in road.
+3	You're inside building.
+4	You're in valley.
+5	You're at end of road.
+6	You're at cliff.
+7	You're at slit in streambed.
+8	You're outside grate.
+9	You're below the grate.
+10	You're in cobble crawl.
+11	You're in debris room.
+13	You're in bird chamber.
+14	You're at top of small pit.
+15	You're in Hall of Mists.
+17	You're on east bank of fissure.
+18	You're in nugget-of-gold room.
+19	You're in Hall of Mt King.
+23	You're at west end of Twopit Room.
+24	You're in east pit.
+25	You're in west pit.
+27	You're on west bank of fissure.
+28	You're in n/s passage above e/w passage.
+30	You're in the west side chamber.
+33	You're at "Y2".
+35	You're at window on pit.
+36	You're in dirty passage.
+37	You're at brink of small pit.
+38	You're at bottom of pit with stream.
+39	You're in dusty rock room.
+41	You're at west end of Hall of Mists.
+57	You're at brink of pit.
+60	You're at east end of long hall.
+61	You're at west end of long hall.
+64	You're at complex junction.
+65	You're in Bedquilt.
+66	You're in Swiss Cheese Room.
+67	You're at east end of Twopit Room.
+68	You're in Slab Room.
+71	You're at junction of three secret canyons.
+72	You're in large low room.
+74	You're in secret e/w canyon above tight canyon.
+88	You're in narrow corridor.
+91	You're at steep incline above large room.
+92	You're in Giant Room.
+95	You're in cavern with waterfall.
+96	You're in Soft Room.
+97	You're in Oriental Room.
+98	You're in misty cavern.
+99	You're in alcove.
+100	You're in Plover Room.
+101	You're in dark-room.
+102	You're in arched hall.
+103	You're in Shell Room.
+106	You're in anteroom.
+108	You're at Witt's End.
+109	You're in Mirror Canyon.
+110	You're at window on pit.
+111	You're at top of stalactite.
+113	You're at reservoir.
+115	You're at ne end.
+116	You're at sw end.
+117	You're on sw side of chasm.
+118	You're in sloping corridor.
+122	You're on ne side of chasm.
+123	You're in corridor.
+124	You're at fork in path.
+125	You're at junction with warm walls.
+126	You're at breath-taking view.
+127	You're in Chamber of Boulders.
+128	You're in limestone passage.
+129	You're in front of Barren Room.
+130	You're in Barren Room.
+167	You're on ledge.
+168	You're at bottom of reservoir.
+169	You're north of reservoir.
+172	You're at base of cliff.
+176	You're at top of cliff.

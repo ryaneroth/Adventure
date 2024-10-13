@@ -1,0 +1,459 @@
+1	Somewhere nearby is Colossal Cave, where others have found fortunes in
+1	treasure and gold, though it is rumored that some who enter are never
+1	seen again.  Magic is said to work in the cave.  I will be your eyes
+1	and hands.  Direct me with commands of 1 or 2 words.  I should warn
+1	you that I look at only the first five letters of each word, so you'll
+1	have to enter "northeast" as "ne" to distinguish it from "north".
+1	You can type "help" for some general hints.  For information on how
+1	to end your adventure, scoring, etc., type "info".
+1				      - - -
+1	This program was originally developed by Willie Crowther.  Most of the
+1	features of the current program were added by Don Woods.  Contact Don
+1	if you have any questions, comments, etc.
+2	A little dwarf with a big knife blocks your way.
+3	A little dwarf just walked around a corner, saw you, threw a little
+3	axe at you which missed, cursed, and ran away.
+4	There are %1 threatening little dwarves in the room with you.
+5	There is a threatening little dwarf in the room with you!
+6	One sharp nasty knife is thrown at you!
+7	A hollow voice says "PLUGH".
+8	It gets you!
+9	It misses!
+10	I am unsure how you are facing.  Use compass points or nearby objects.
+11	I don't know in from out here.  Use compass points or name something
+11	in the general direction you want to go.
+12	I don't know how to apply that word here.
+13	You're quite welcome.
+14	I'm game.  Would you care to explain how?
+15	Sorry, but I am not allowed to give more detail.  I will repeat the
+15	long description of your location.
+16	It is now pitch dark.  If you proceed you will likely fall into a pit.
+17	If you prefer, simply type w rather than west.
+18	Are you trying to catch the bird?
+19	Something about you seems to be frightening the bird.  Perhaps you
+19	might figure out what it is.
+20	Are you trying to somehow deal with the snake?
+21	You can't kill the snake, or drive it away, or avoid it, or anything
+21	like that.  There is a way to get by, but you don't have the necessary
+21	resources right now.
+22	Do you really want to quit now?
+23	You fell into a pit and broke every bone in your body!
+24	You are already carrying it!
+25	You can't be serious!
+26	The bird seemed unafraid at first, but as you approach it becomes
+26	disturbed and you cannot catch it.
+27	You can catch the bird, but you cannot carry it.
+28	There is nothing here with a lock!
+29	You aren't carrying it!
+30	The little bird attacks the green snake, and in an astounding flurry
+30	drives the snake away.
+31	You have no keys!
+32	It has no lock.
+33	I don't know how to lock or unlock such a thing.
+34	It was already locked.
+35	The grate is now locked.
+36	The grate is now unlocked.
+37	It was already unlocked.
+38	The urn is empty and will not light.
+39	Your lamp is now on.
+40	Your lamp is now off.
+41	There is no way to get past the bear to unlock the chain, which is
+41	probably just as well.
+42	Nothing happens.
+43	Where?
+44	There is nothing here to attack.
+45	The little bird is now dead.  Its body disappears.
+46	Attacking the snake both doesn't work and is very dangerous.
+47	You killed a little dwarf.
+48	You attack a little dwarf, but he dodges out of the way.
+49	With what?  Your bare hands?
+50	Good try, but that is an old worn-out magic word.
+51	I know of places, actions, and things.  Most of my vocabulary
+51	describes places and is used to move you there.  To move, try words
+51	like forest, building, downstream, enter, east, west, north, south,
+51	up, or down.  I know about a few special objects, like a black rod
+51	hidden in the cave.  These objects can be manipulated using some of
+51	the action words that I know.  Usually you will need to give both the
+51	object and action words (in either order), but sometimes I can infer
+51	the object from the verb alone.  Some objects also imply verbs; in
+51	particular, "inventory" implies "take inventory", which causes me to
+51	give you a list of what you're carrying.  Some objects have unexpected
+51	effects; the effects are not always desirable!  Usually people having
+51	trouble moving just need to try a few more words.  Usually people
+51	trying unsuccessfully to manipulate an object are attempting something
+51	beyond their (or my!) capabilities and should try a completely
+51	different tack.  One point often confusing to beginners is that, when
+51	there are several ways to go in a certain direction (e.g., if there
+51	are several holes in a wall), choosing that direction in effect
+51	chooses one of the ways at random; often, though, by specifying the
+51	place you want to reach you can guarantee choosing the right path.
+51	Also, to speed the game you can sometimes move long distances with a
+51	single word.  For example, "building" usually gets you to the building
+51	from anywhere above ground except when lost in the forest.  Also, note
+51	that cave passages and forest paths turn a lot, so leaving one place
+51	heading north doesn't guarantee entering the next from the south.
+51	However (another important point), except when you've used a "long
+51	distance" word such as "building", there is always a way to go back
+51	where you just came from unless I warn you to the contrary, even
+51	though the direction that takes you back might not be the reverse of
+51	what got you here.  Good luck, and have fun!
+52	There is no way to go that direction.
+53	Please stick to 1- and 2-word commands.
+54	OK
+55	You can't unlock the keys.
+56	You have crawled around in some little holes and wound up back in the
+56	main passage.
+57	I don't know where the cave is, but hereabouts no stream can run on
+57	the surface for long.  I would try the stream.
+58	I need more detailed instructions to do that.
+59	I can only tell you what you see as you move about and manipulate
+59	things.  I cannot tell you where remote things are.
+60	The ogre snarls and shoves you back.
+61	Huh?
+62	Are you trying to get into the cave?
+63	The grate is very solid and has a hardened steel lock.  You cannot
+63	enter without a key, and there are no keys nearby.  I would recommend
+63	looking elsewhere for the keys.
+64	The trees of the forest are large hardwood oak and maple, with an
+64	occasional grove of pine or spruce.  There is quite a bit of under-
+64	growth, largely birch and ash saplings plus nondescript bushes of
+64	various sorts.  This time of year visibility is quite restricted by
+64	all the leaves, but travel is quite easy if you detour around the
+64	spruce and berry bushes.
+65	Welcome to Adventure!!  Would you like instructions?
+66	Digging without a shovel is quite impractical.  Even with a shovel
+66	progress is unlikely.
+67	Blasting requires dynamite.
+68	I'm as confused as you are.
+69	Mist is a white vapor, usually water, seen from time to time in
+69	caverns.  It can be found anywhere but is frequently a sign of a deep
+69	pit leading down to water.
+70	Your feet are now wet.
+71	I think I just lost my appetite.
+72	Thank you, it was delicious!
+73	You have taken a drink from the stream.  The water tastes strongly of
+73	minerals, but is not unpleasant.  It is extremely cold.
+74	The bottle of water is now empty.
+75	Rubbing the electric lamp is not particularly rewarding.  Anyway,
+75	nothing exciting happens.
+76	Peculiar.  Nothing unexpected happens.
+77	Your bottle is empty and the ground is wet.
+78	You can't pour that.
+79	Watch it!
+80	Which way?
+81	Oh dear, you seem to have gotten yourself killed.  I might be able to
+81	help you out, but I've never really done this before.  Do you want me
+81	to try to reincarnate you?
+82	All right.  But don't blame me if something goes wr......
+82	                    --- POOF!! ---
+82	You are engulfed in a cloud of orange smoke.  Coughing and gasping,
+82	you emerge from the smoke and find....
+83	You clumsy oaf, you've done it again!  I don't know how long I can
+83	keep this up.  Do you want me to try reincarnating you again?
+84	Okay, now where did I put my orange smoke?....  >POOF!<
+84	Everything disappears in a dense cloud of orange smoke.
+85	Now you've really done it!  I'm out of orange smoke!  You don't expect
+85	me to do a decent reincarnation without any orange smoke, do you?
+86	Okay, if you're so smart, do it yourself!  I'm leaving!
+90	>>> messages 81 thru 90 are reserved for "obituaries". <<<
+91	Sorry, but I no longer seem to remember how it was you got here.
+92	You can't carry anything more.  You'll have to drop something first.
+93	You can't go through a locked steel grate!
+94	I believe what you want is right here with you.
+95	You don't fit through a two-inch slit!
+96	I respectfully suggest you go across the bridge instead of jumping.
+97	There is no way across the fissure.
+98	You're not carrying anything.
+99	You are currently holding the following:
+100	It's not hungry (it's merely pinin' for the fjords).  Besides, you
+100	have no bird seed.
+101	The snake has now devoured your bird.
+102	There's nothing here it wants to eat (except perhaps you).
+103	You fool, dwarves eat only coal!  Now you've made him *REALLY* mad!!
+104	You have nothing in which to carry it.
+105	Your bottle is already full.
+106	There is nothing here with which to fill the bottle.
+107	Your bottle is now full of water.
+108	Your bottle is now full of oil.
+109	You can't fill that.
+110	Don't be ridiculous!
+111	The door is extremely rusty and refuses to open.
+112	The plant indignantly shakes the oil off its leaves and asks, "Water?"
+113	The hinges are quite thoroughly rusted now and won't budge.
+114	The oil has freed up the hinges so that the door will now move,
+114	although it requires some effort.
+115	The plant has exceptionally deep roots and cannot be pulled free.
+116	The dwarves' knives vanish as they strike the walls of the cave.
+117	Something you're carrying won't fit through the tunnel with you.
+117	You'd best take inventory and drop something.
+118	You can't fit this five-foot clam through that little passage!
+119	You can't fit this five-foot oyster through that little passage!
+120	I advise you to put down the clam before opening it.  >STRAIN!<
+121	I advise you to put down the oyster before opening it.  >WRENCH!<
+122	You don't have anything strong enough to open the clam.
+123	You don't have anything strong enough to open the oyster.
+124	A glistening pearl falls out of the clam and rolls away.  Goodness,
+124	this must really be an oyster.  (I never was very good at identifying
+124	bivalves.)  Whatever it is, it has now snapped shut again.
+125	The oyster creaks open, revealing nothing but oyster inside.  It
+125	promptly snaps shut again.
+126	You have crawled around in some little holes and found your way
+126	blocked by a recent cave-in.  You are now back in the main passage.
+127	There are faint rustling noises from the darkness behind you.
+128	Out from the shadows behind you pounces a bearded pirate!  "Har, har,"
+128	he chortles, "I'll just take all this booty and hide it away with me
+128	chest deep in the maze!"  He snatches your treasure and vanishes into
+128	the gloom.
+129	A sepulchral voice reverberating through the cave, says, "Cave closing
+129	soon.  All adventurers exit immediately through main office."
+130	A mysterious recorded voice groans into life and announces:
+130	   "This exit is closed.  Please leave via main office."
+131	It looks as though you're dead.  Well, seeing as how it's so close to
+131	closing time anyway, I think we'll just call it a day.
+132	The sepulchral voice intones, "The cave is now closed."  As the echoes
+132	fade, there is a blinding flash of light (and a small puff of orange
+132	smoke). . . .    As your eyes refocus, you look around and find...
+133	There is a loud explosion, and a twenty-foot hole appears in the far
+133	wall, burying the dwarves in the rubble.  You march through the hole
+133	and find yourself in the main office, where a cheering band of
+133	friendly elves carry the conquering adventurer off into the sunset.
+134	There is a loud explosion, and a twenty-foot hole appears in the far
+134	wall, burying the snakes in the rubble.  A river of molten lava pours
+134	in through the hole, destroying everything in its path, including you!
+135	There is a loud explosion, and you are suddenly splashed across the
+135	walls of the room.
+136	The resulting ruckus has awakened the dwarves.  There are now several
+136	threatening little dwarves in the room with you!  Most of them throw
+136	knives at you!  All of them get you!
+137	Oh, leave the poor unhappy bird alone.
+138	I daresay whatever you want is around here somewhere.
+139	I don't know the word "stop".  Use "quit" if you want to give up.
+140	You can't get there from here.
+141	You are being followed by a very large, tame bear.
+142	For a summary of the most recent changes to the game, say "news".
+142	If you want to end your adventure early, say "quit".  To suspend your
+142	adventure such that you can continue later, say "suspend" (or "pause"
+142	or "save").  To see how well you're doing, say "score".  To get full
+142	credit for a treasure, you must have left it safely in the building,
+142	though you get partial credit just for locating it.  You lose points
+142	for getting killed, or for quitting, though the former costs you more.
+142	There are also points based on how much (if any) of the cave you've
+142	managed to explore; in particular, there is a large bonus just for
+142	getting in (to distinguish the beginners from the rest of the pack),
+142	and there are other ways to determine whether you've been through some
+142	of the more harrowing sections.  If you think you've found all the
+142	treasures, just keep exploring for a while.  If nothing interesting
+142	happens, you haven't found them all yet.  If something interesting
+142	*DOES* happen (incidentally, there *ARE* ways to hasten things along),
+142	it means you're getting a bonus and have an opportunity to garner many
+142	more points in the Master's section.  I may occasionally offer hints
+142	if you seem to be having trouble.  If I do, I'll warn you in advance
+142	how much it will affect your score to accept the hints.  Finally, to
+142	save time, you may specify "brief", which tells me never to repeat the
+142	full description of a place unless you explicitly ask me to.
+143	Now let's see you do it without suspending in mid-Adventure.
+144	There is nothing here with which to fill it.
+145	The sudden change in temperature has delicately shattered the vase.
+146	It is beyond your power to do that.
+147	I don't know how.
+148	It is too far up for you to reach.
+149	You killed a little dwarf.  The body vanishes in a cloud of greasy
+149	black smoke.
+150	The shell is very strong and is impervious to attack.
+151	What's the matter, can't you read?  Now you'd best start over.
+152	The axe bounces harmlessly off the dragon's thick scales.
+153	The dragon looks rather nasty.  You'd best not try to get by.
+154	The little bird attacks the green dragon, and in an astounding flurry
+154	gets burnt to a cinder.  The ashes blow away.
+155	On what?
+156	Okay, from now on I'll only describe a place in full the first time
+156	you come to it.  To get the full description, say "look".
+157	Trolls are close relatives with the rocks and have skin as tough as
+157	that of a rhinoceros.  The troll fends off your blows effortlessly.
+158	The troll deftly catches the axe, examines it carefully, and tosses it
+158	back, declaring, "Good workmanship, but it's not valuable enough."
+159	The troll catches your treasure and scurries away out of sight.
+160	The troll refuses to let you cross.
+161	There is no longer any way across the chasm.
+162	Just as you reach the other side, the bridge buckles beneath the
+162	weight of the bear, which was still following you around.  You
+162	scrabble desperately for support, but as the bridge collapses you
+162	stumble back and fall into the chasm.
+163	The bear lumbers toward the troll, who lets out a startled shriek and
+163	scurries away.  The bear soon gives up the pursuit and wanders back.
+164	The axe misses and lands near the bear where you can't get at it.
+165	With what?  Your bare hands?  Against *HIS* bear hands??
+166	The bear is confused; he only wants to be your friend.
+167	For crying out loud, the poor thing is already dead!
+168	The bear eagerly wolfs down your food, after which he seems to calm
+168	down considerably and even becomes rather friendly.
+169	The bear is still chained to the wall.
+170	The chain is still locked.
+171	The chain is now unlocked.
+172	The chain is now locked.
+173	There is nothing here to which the chain can be locked.
+174	There is nothing here to eat.
+175	Do you want the hint?
+176	Do you need help getting out of the maze?
+177	You can make the passages look less alike by dropping things.
+178	Are you trying to explore beyond the plover room?
+179	There is a way to explore that region without having to worry about
+179	falling into a pit.  None of the objects available is immediately
+179	useful in discovering the secret.
+180	Do you need help getting out of here?
+181	Don't go west.
+182	Gluttony is not one of the troll's vices.  Avarice, however, is.
+183	Your lamp is getting dim.  You'd best start wrapping this up, unless
+183	you can find some fresh batteries.  I seem to recall there's a vending
+183	machine in the maze.  Bring some coins with you.
+184	Your lamp has run out of power.
+185	Please answer the question.
+186	There are faint rustling noises from the darkness behind you.  As you
+186	turn toward them, the beam of your lamp falls across a bearded pirate.
+186	He is carrying a large chest.  "Shiver me timbers!" he cries, "I've
+186	been spotted!  I'd best hie meself off to the maze to hide me chest!"
+186	With that, he vanishes into the gloom.
+187	Your lamp is getting dim.  You'd best go back for those batteries.
+188	Your lamp is getting dim.  I'm taking the liberty of replacing the
+188	batteries.
+189	Your lamp is getting dim, and you're out of spare batteries.  You'd
+189	best start wrapping this up.
+190	You sift your fingers through the dust, but succeed only in
+190	obliterating the cryptic message.
+191	Do you need help dealing with the ogre?
+192	Hmmm, this looks like a clue, which means it'll cost you 10 points to
+192	read it.  Should I go ahead and read it anyway?
+193	It says, "There is a way out of this place.  Do you need any more
+193	information to escape?  Sorry, but this initial hint is all you get."
+194	There is nothing the presence of which will prevent you from defeating
+194	him; thus it can't hurt to fetch everything you possibly can.
+195	I'm afraid I don't understand.
+196	Your hand passes through it as though it weren't there.
+197	You strike the mirror a resounding blow, whereupon it shatters into a
+197	myriad tiny fragments.
+198	You have taken the vase and hurled it delicately to the ground.
+199	You prod the nearest dwarf, who wakes up grumpily, takes one look at
+199	you, curses, and grabs for his axe.
+200	Is this acceptable?
+201	This adventure is already over.  To start a new adventure, or to
+201	resume an earlier adventure, please run a fresh copy of the program.
+202	The ogre doesn't appear to be hungry.
+203	The ogre, who despite his bulk is quite agile, easily dodges your
+203	attack.  He seems almost amused by your puny effort.
+204	The ogre, distracted by your rush, is struck by the knife.  With a
+204	blood-curdling yell he turns and bounds after the dwarves, who flee
+204	in panic.  You are left alone in the room.
+205	The ogre, distracted by your rush, is struck by the knife.  With a
+205	blood-curdling yell he turns and bounds after the dwarf, who flees
+205	in panic.  You are left alone in the room.
+206	The bird flies about agitatedly for a moment.
+207	The bird flies agitatedly about the cage.
+208	The bird flies about agitatedly for a moment, then disappears through
+208	the crack.  It reappears shortly, carrying in its beak a jade
+208	necklace, which it drops at your feet.
+209	The urn is now lit.
+210	The urn is now dark.
+211	You empty the bottle into the urn, which promptly ejects the water
+211	with uncanny accuracy, squirting you directly between the eyes.
+212	Your bottle is now empty and the urn is full of oil.
+213	The urn is already full of oil.
+214	There's no way to get the oil out of the urn.
+215	The urn is far too firmly embedded for your puny strength to budge it.
+216	As you rub the urn, there is a flash of light and a genie appears.
+216	His aspect is stern as he advises: "One who wouldst traffic in
+216	precious stones must first learn to recognize the signals thereof."
+216	He wrests the urn from the stone, leaving a small cavity.  Turning to
+216	face you again, he fixes you with a steely eye and intones: "Caution!"
+216	Genie and urn vanish in a cloud of amber smoke.  The smoke condenses
+216	to form a rare amber gemstone, resting in the cavity in the rock.
+217	I suppose you collect doughnut holes, too?
+218	The gem fits easily into the cavity.
+219	The persian rug stiffens and rises a foot or so off the ground.
+220	The persian rug draped over your shoulder seems to wriggle for a
+220	moment, but then subsides.
+221	The persian rug settles gently to the ground.
+222	The rug hovers stubbornly where it is.
+223	The rug does not appear inclined to cooperate.
+224	If you mean to use the persian rug, it does not appear inclined to
+224	cooperate.
+225	Though you flap your arms furiously, it is to no avail.
+226	You board the persian rug, which promptly whisks you across the chasm.
+226	You have time for a fleeting glimpse of a two thousand foot drop to a
+226	mighty river; then you find yourself on the other side.
+227	The rug ferries you back across the chasm.
+228	All is silent.
+229	The stream is gurgling placidly.
+230	The wind whistles coldly past your ears.
+231	The stream splashes loudly into the pool.
+232	You are unable to make anything of the splashing noise.
+233	You can hear the murmuring of the beanstalks and the snoring of the
+233	dwarves.
+234	A loud hissing emanates from the snake pit.
+235	The air is filled with a dull rumbling sound.
+236	The roar is quite loud here.
+237	The roaring is so loud that it drowns out all other sound.
+238	The bird eyes you suspiciously and flutters away.  A moment later you
+238	feel something wet land on your head, but upon looking up you can see
+238	no sign of the culprit.
+239	There are only a few drops--not enough to carry.
+240	Your head buzzes strangely for a moment.
+241	(Uh, y'know, that wasn't very bright.)
+242	It's a pity you took so long about it.
+243	Are you wondering what to do here?
+244	This section is quite advanced.  Find the cave first.
+245	Upstream or downstream?
+246	Wizards are not to be disturbed by such as you.
+247	Would you like to be shown out of the forest?
+248	Go east ten times.  If that doesn't get you out, then go south, then
+248	west twice, then south.
+249	The waters are crashing loudly against the shore.
+250	%1 of them throw knives at you!
+251	%1 of them get you!
+252	One of them gets you!
+253	None of them hits you!
+254	Sorry, I don't know the word "%W".
+255	What do you want to do with the %L?
+256	I see no %L here.
+257	%C what?
+258	Okay, "%W".
+259	You have garnered %3 out of a possible %3 points, using %5 turn%S.
+260	I can suspend your Adventure for you so that you can resume later, but
+260	it will cost you 5 points.
+261	I am prepared to give you a hint, but it will cost you %1 point%S.
+262	You scored %3 out of a possible %3, using%5 turn%S.
+263	To achieve the next higher rating, you need %2 more point%S.
+264	To achieve the next higher rating would be a neat trick!
+264	Congratulations!!
+265	You just went off my scale!!
+266	To resume your Adventure, start a new game and then say "RESUME".
+267	Table space used:
+267	%6 of %6 words of messages   %6 of %6 travel options
+267	%6 of %6 vocabulary words    %6 of %6 locations
+267	%6 of %6 objects             %6 of %6 action verbs
+267	%6 of %6 "random" messages   %6 of %6 "class" messages
+267	%6 of %6 hints               %6 of %6 turn thresholds
+268	To resume an earlier Adventure, you must abandon the current one.
+269	I'm sorry, but that Adventure was begun using Version%2.%1 of the
+269	program, and this is Version%2.%1.  You must find the other version
+269	in order to resume that Adventure.
+270	A dark fog creeps in to surround you.  From somewhere in the fog you
+270	hear a stern voice.  "This Adventure has been tampered with!  You have
+270	been dabbling in magic, knowing not the havoc you might cause thereby.
+270	Leave at once, before you do irrevocable harm!"  The fog thickens,
+270	until at last you can see nothing at all.  Your vision then clears,
+270	and you find yourself back in The Real World.
+271	Guess again.
+272	You're missing only one other treasure.  Do you need help finding it?
+273	Once you've found all the other treasures, it is no longer possible to
+273	locate the one you're now missing.
+274	Sorry, but the path twisted and turned so much that I can't figure
+274	out which way to go to get back.
+275	Version 2.5 is essentially the same as Version II; the cave and the
+275	hazards therein are unchanged, and top score is still 430 points.
+275	There are a few more hints, especially for some of the more obscure
+275	puzzles.  There are a few minor bugfixes and cosmetic changes.  You
+275	can now save a game and resume it at once (formerly you had to wait a
+275	while first), but it now costs you a few points each time you save the
+275	game.  Saved games are now stored in much smaller files than before.
+276	You don't have to say "go" every time; just specify a direction or, if
+276	it's nearby, name the place to which you wish to move.

@@ -1,0 +1,3 @@
+I'm sorry, but that Adventure was begun using Version%2.%1 of the
+program, and this is Version%2.%1.  You must find the other version
+in order to resume that Adventure.
