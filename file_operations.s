@@ -49,7 +49,7 @@ _foundfile:
   rts
 
 
-;;;;;;;;;;; Everythign above is new
+;;;;;;;;;;; Everything above is new
 
 open_location_directory:
   jsr fat32_openroot                      ; open root directory
