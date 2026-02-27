@@ -33,7 +33,7 @@ This project brings the classic 1976 text adventure game to the KIM-1. Game data
 ### Prerequisites
 
 - [cc65](https://cc65.github.io/) (`ca65` assembler, `ld65` linker)
-- [`srec_cat`](https://srecord.sourceforge.net/) (for generating the `.ptp` paper tape image)
+- [srec_cat](https://srecord.sourceforge.net/) (for generating the `.ptp` paper tape image)
 
 ### Build
 
