@@ -60,6 +60,11 @@ msg_target = $777           ; 1 byte target message id for ADVENT4
 prl_guard_lo = $778         ; 2-byte read guard for print_room_long
 prl_guard_hi = $779
 rng_state = $77A            ; 1-byte RNG state
+num_deaths = $77B           ; 1 byte: times player has died (0..3)
+gave_up    = $77C           ; 1 byte: 1 if player used QUIT, 0 if natural end
+dflag      = $77D           ; 1 byte: 1 once player reaches deep cave (room>=15)
+tally      = $77E           ; 1 byte: treasures not yet returned to building
+closing    = $77F           ; 1 byte: 1 if cave-closing sequence has triggered
 noun_buf = $730             ; 16-byte noun token buffer
 
 snapshot_base = $700        ; save/load snapshot base address
@@ -169,6 +174,14 @@ _initsuccess:
   jsr init_prop_table
   jsr init_place_table
   jsr init_visited_table
+
+  lda #0
+  sta num_deaths
+  sta gave_up
+  sta dflag
+  sta closing
+  lda #15
+  sta tally
 
   lda #1
   sta target_room
@@ -484,6 +497,15 @@ _sr_dest_room_check:
   lda dest_lo
   beq _skip_dest_room_text
   sta target_room
+  ; Set dflag once player reaches the deep cave (room >= 15).
+  lda dflag
+  bne _sr_dflag_done
+  lda target_room
+  cmp #15
+  bcc _sr_dflag_done
+  lda #1
+  sta dflag
+_sr_dflag_done:
   jsr sync_present_from_room
   lda target_room
   tax
@@ -5514,6 +5536,20 @@ _eac_take_present:
   sta present_table,x
   lda #1
   sta toting_table,x
+  ; Tally: removing a treasure from the building re-opens it.
+  lda target_room
+  cmp #3
+  bne _eac_take_no_tally
+  txa
+  cmp #50
+  bcc _eac_take_no_tally
+  cmp #65
+  bcs _eac_take_no_tally
+  lda tally
+  cmp #15
+  bcs _eac_take_no_tally     ; already at max
+  inc tally
+_eac_take_no_tally:
   lda #$FF
   sta place_table,x
   ldx #<msg_taken_prefix
@@ -5600,7 +5636,9 @@ _eac_drop_in_range:
   bne _eac_drop_holding
   lda place_table,x
   cmp target_room
-  beq _eac_drop_already_here
+  bne :+
+  jmp _eac_drop_already_here
+:
   jmp _eac_drop_not_carrying
 _eac_drop_holding:
   lda #0
@@ -5609,6 +5647,23 @@ _eac_drop_holding:
   sta present_table,x
   lda target_room
   sta place_table,x
+  ; Tally: depositing a treasure at the building (room 3) closes it out.
+  lda target_room
+  cmp #3
+  bne _eac_drop_no_tally
+  txa
+  cmp #50
+  bcc _eac_drop_no_tally
+  cmp #65
+  bcs _eac_drop_no_tally
+  lda tally
+  beq _eac_drop_no_tally     ; already 0, don't underflow
+  dec tally
+  bne _eac_drop_no_tally     ; still >0, not done yet
+  lda closing
+  bne _eac_drop_no_tally     ; already triggered
+  jsr trigger_closing
+_eac_drop_no_tally:
   ldx #<msg_dropped_prefix
   ldy #>msg_dropped_prefix
   jsr print_zstr_xy
@@ -5692,6 +5747,8 @@ _eac_quit:
   jsr newline
   plp
   bcc _eac_quit_cancel
+  lda #1
+  sta gave_up
   ldx #<msg_quit_ok
   ldy #>msg_quit_ok
   jsr print_zstr_xy
@@ -7054,9 +7111,74 @@ _eac_verbmsg_print:
   jsr newline
   rts
 
+trigger_closing:
+  ; Called when all 15 treasures have been deposited at the building.
+  ; Sets the closing flag (+25 pts) and warns the player.
+  lda #1
+  sta closing
+  ldx #<msg_cave_closing
+  ldy #>msg_cave_closing
+  jsr print_zstr_xy
+  jsr newline
+  rts
+
+player_death:
+  ; Increment death counter. If >= 3 lives used, end the game.
+  ; Otherwise offer resurrection: respawn at room 1, drop all items.
+  inc num_deaths
+  lda num_deaths
+  cmp #3
+  bcs _pd_game_over
+  ldx #<msg_death
+  ldy #>msg_death
+  jsr print_zstr_xy
+  jsr newline
+  ldx #<msg_resurrect
+  ldy #>msg_resurrect
+  jsr print_zstr_xy
+  jsr newline
+  jsr prompt_yes_no
+  php
+  jsr newline
+  plp
+  bcc _pd_decline
+  ; Drop all carried items where the player is (death room).
+  ldx #1
+_pd_drop_loop:
+  cpx #100
+  bcs _pd_drop_done
+  lda toting_table,x
+  beq _pd_drop_next
+  lda #0
+  sta toting_table,x
+  lda #1
+  sta present_table,x
+  lda target_room
+  sta place_table,x
+_pd_drop_next:
+  inx
+  jmp _pd_drop_loop
+_pd_drop_done:
+  ; Respawn at room 1.
+  lda #1
+  sta target_room
+  jsr sync_present_from_room
+  lda #0
+  sta desc_mode
+  jsr newline
+  jsr print_room_long
+  jsr print_room_objects
+  jsr newline
+  rts
+_pd_decline:
+_pd_game_over:
+  jsr print_quit_summary
+  jmp halt_loop
+
 print_score:
-  ; Approximate original Adventure scoring using currently tracked state:
+  ; Scoring per original Adventure:
   ; - treasure discovery/return points
+  ; - survival bonus, gave-up bonus, dflag bonus, closing bonus
   ; - magazine-at-witt bonus
   ; - fixed baseline +2
   jsr compute_score
@@ -7089,7 +7211,8 @@ print_quit_summary:
   ldx #<msg_survival_label
   ldy #>msg_survival_label
   jsr print_zstr_xy
-  lda #30
+  ldx num_deaths
+  lda survival_table,x
   sta work_lo
   lda #0
   sta work_hi
@@ -7100,8 +7223,6 @@ print_quit_summary:
   ldy #>msg_score_label
   jsr print_zstr_xy
   jsr compute_score
-  lda #30
-  jsr score_add_a
   jsr print_u16_dec
   jsr newline
   rts
@@ -7171,8 +7292,33 @@ _cs_done_treasures:
   jsr score_add_a
 _cs_no_mag_bonus:
   lda #2
+  jsr score_add_a           ; baseline +2
+  ; Survival: (3 - num_deaths) * 10
+  ldx num_deaths
+  lda survival_table,x
   jsr score_add_a
+  ; Gave-up bonus: +4 if game ended without QUIT
+  lda gave_up
+  bne _cs_no_gaveup_bonus
+  lda #4
+  jsr score_add_a
+_cs_no_gaveup_bonus:
+  ; Exploration bonus: +25 once deep cave reached
+  lda dflag
+  beq _cs_no_dflag_bonus
+  lda #25
+  jsr score_add_a
+_cs_no_dflag_bonus:
+  ; Cave-closing bonus: +25 once all treasures returned
+  lda closing
+  beq _cs_no_closing_bonus
+  lda #25
+  jsr score_add_a
+_cs_no_closing_bonus:
   rts
+
+survival_table:
+  .byte 30, 20, 10, 0      ; indexed by num_deaths (0..3)
 
 score_add_a:
   clc
@@ -9595,3 +9741,9 @@ msg_survival_label:
   .asciiz "Survival:           "
 msg_score_label:
   .asciiz "Score:              "
+msg_cave_closing:
+  .asciiz "A distant explosion shakes the cave! All entrances have collapsed. The cave is now closed."
+msg_death:
+  .asciiz "You are dead."
+msg_resurrect:
+  .asciiz "Do you wish to be reincarnated?"
