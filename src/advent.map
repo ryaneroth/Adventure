@@ -1,0 +1,110 @@
+Modules list:
+-------------
+advent.o:
+    CODE              Offs=000000  Size=0057B2  Align=00001  Fill=0000
+    RODATA            Offs=000000  Size=000000  Align=00001  Fill=0000
+    BSS               Offs=000000  Size=000000  Align=00001  Fill=0000
+    DATA              Offs=000000  Size=000000  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000000  Size=000000  Align=00001  Fill=0000
+    NULL              Offs=000000  Size=000000  Align=00001  Fill=0000
+
+
+Segment list:
+-------------
+Name                   Start     End    Size  Align
+----------------------------------------------------
+NULL                  000000  000000  000000  00001
+ZEROPAGE              000000  000000  000000  00001
+CODE                  002000  0077B1  0057B2  00001
+BSS                   0077B2  0077B2  000000  00001
+DATA                  0077B2  0077B2  000000  00001
+RODATA                0077B2  0077B2  000000  00001
+
+
+Exports list by name:
+---------------------
+__BSS_LOAD__              0077B2  LA    __BSS_RUN__               0077B2  LA    
+__BSS_SIZE__              000000  EA    __CODE_LOAD__             002000  LA    
+__CODE_RUN__              002000  LA    __CODE_SIZE__             0057B2  EA    
+__CPUSTACK_FILEOFFS__     000000  EA    __CPUSTACK_LAST__         000100  LA    
+__CPUSTACK_SIZE__         000100  EA    __CPUSTACK_START__        000100  LA    
+__DATA_LOAD__             0077B2  LA    __DATA_RUN__              0077B2  LA    
+__DATA_SIZE__             000000  EA    __MAINROM_FILEOFFS__      000000  EA    
+__MAINROM_LAST__          00E000  LA    __MAINROM_SIZE__          001000  EA    
+__MAINROM_START__         00E000  LA    __RAM_FILEOFFS__          000000  EA    
+__RAM_LAST__              0077B2  LA    __RAM_SIZE__              00BF80  EA    
+__RAM_START__             002000  LA    __RODATA_LOAD__           0077B2  LA    
+__RODATA_RUN__            0077B2  LA    __RODATA_SIZE__           000000  EA    
+__STACKSIZE__             000080 REA    __STARTADDRESS__          002000  EA    
+__TOP_FILEOFFS__          000000  EA    __TOP_LAST__              00F000  LA    
+__TOP_SIZE__              001000  EA    __TOP_START__             00F000  LA    
+__ZEROPAGE_LOAD__         000000  LA    __ZEROPAGE_RUN__          000000  LA    
+__ZEROPAGE_SIZE__         000000  EA    __ZP_FILEOFFS__           000000  EA    
+__ZP_LAST__               000000  LA    __ZP_SIZE__               0000EE  EA    
+__ZP_START__              000000  LA    
+
+
+Exports list by value:
+----------------------
+__ZP_START__              000000  LA    __ZEROPAGE_RUN__          000000  LA    
+__BSS_SIZE__              000000  EA    __ZEROPAGE_SIZE__         000000  EA    
+__TOP_FILEOFFS__          000000  EA    __RODATA_SIZE__           000000  EA    
+__CPUSTACK_FILEOFFS__     000000  EA    __ZP_FILEOFFS__           000000  EA    
+__RAM_FILEOFFS__          000000  EA    __ZP_LAST__               000000  LA    
+__ZEROPAGE_LOAD__         000000  LA    __MAINROM_FILEOFFS__      000000  EA    
+__DATA_SIZE__             000000  EA    __STACKSIZE__             000080 REA    
+__ZP_SIZE__               0000EE  EA    __CPUSTACK_START__        000100  LA    
+__CPUSTACK_SIZE__         000100  EA    __CPUSTACK_LAST__         000100  LA    
+__TOP_SIZE__              001000  EA    __MAINROM_SIZE__          001000  EA    
+__CODE_LOAD__             002000  LA    __CODE_RUN__              002000  LA    
+__STARTADDRESS__          002000  EA    __RAM_START__             002000  LA    
+__CODE_SIZE__             0057B2  EA    __DATA_LOAD__             0077B2  LA    
+__RODATA_RUN__            0077B2  LA    __RAM_LAST__              0077B2  LA    
+__RODATA_LOAD__           0077B2  LA    __BSS_RUN__               0077B2  LA    
+__DATA_RUN__              0077B2  LA    __BSS_LOAD__              0077B2  LA    
+__RAM_SIZE__              00BF80  EA    __MAINROM_START__         00E000  LA    
+__MAINROM_LAST__          00E000  LA    __TOP_LAST__              00F000  LA    
+__TOP_START__             00F000  LA    
+
+
+Imports list:
+-------------
+__BSS_LOAD__ ([linker generated]):
+__BSS_RUN__ ([linker generated]):
+__BSS_SIZE__ ([linker generated]):
+__CODE_LOAD__ ([linker generated]):
+__CODE_RUN__ ([linker generated]):
+__CODE_SIZE__ ([linker generated]):
+__CPUSTACK_FILEOFFS__ ([linker generated]):
+__CPUSTACK_LAST__ ([linker generated]):
+__CPUSTACK_SIZE__ ([linker generated]):
+__CPUSTACK_START__ ([linker generated]):
+__DATA_LOAD__ ([linker generated]):
+__DATA_RUN__ ([linker generated]):
+__DATA_SIZE__ ([linker generated]):
+__MAINROM_FILEOFFS__ ([linker generated]):
+__MAINROM_LAST__ ([linker generated]):
+__MAINROM_SIZE__ ([linker generated]):
+__MAINROM_START__ ([linker generated]):
+__RAM_FILEOFFS__ ([linker generated]):
+__RAM_LAST__ ([linker generated]):
+__RAM_SIZE__ ([linker generated]):
+__RAM_START__ ([linker generated]):
+__RODATA_LOAD__ ([linker generated]):
+__RODATA_RUN__ ([linker generated]):
+__RODATA_SIZE__ ([linker generated]):
+__STACKSIZE__ ([linker generated]):
+    [linker generated]        c:\cc65\cfg/kim1-60k.cfg:27
+__STARTADDRESS__ ([linker generated]):
+__TOP_FILEOFFS__ ([linker generated]):
+__TOP_LAST__ ([linker generated]):
+__TOP_SIZE__ ([linker generated]):
+__TOP_START__ ([linker generated]):
+__ZEROPAGE_LOAD__ ([linker generated]):
+__ZEROPAGE_RUN__ ([linker generated]):
+__ZEROPAGE_SIZE__ ([linker generated]):
+__ZP_FILEOFFS__ ([linker generated]):
+__ZP_LAST__ ([linker generated]):
+__ZP_SIZE__ ([linker generated]):
+__ZP_START__ ([linker generated]):
+

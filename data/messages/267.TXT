@@ -1,6 +1,0 @@
-Table space used:
-%6 of %6 words of messages   %6 of %6 travel options
-%6 of %6 vocabulary words    %6 of %6 locations
-%6 of %6 objects             %6 of %6 action verbs
-%6 of %6 "random" messages   %6 of %6 "class" messages
-%6 of %6 hints               %6 of %6 turn thresholds

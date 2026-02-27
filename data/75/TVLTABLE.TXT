@@ -1,4 +1,0 @@
-SOUTH 76
-S 76
-NORTH 77
-N 77

@@ -1,1 +1,0 @@
-I am prepared to give you a hint, but it will cost you %1 point%S.

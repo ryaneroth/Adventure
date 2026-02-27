@@ -1,7 +1,0 @@
-Version 2.5 is essentially the same as Version II; the cave and the
-hazards therein are unchanged, and top score is still 430 points.
-There are a few more hints, especially for some of the more obscure
-puzzles.  There are a few minor bugfixes and cosmetic changes.  You
-can now save a game and resume it at once (formerly you had to wait a
-while first), but it now costs you a few points each time you save the
-game.  Saved games are now stored in much smaller files than before.
