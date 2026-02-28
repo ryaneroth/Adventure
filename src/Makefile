@@ -12,4 +12,4 @@ $(PROGRAM).o:	$(PROGRAM).s
 	ca65 -g -l $(PROGRAM).lst $(PROGRAM).s
 
 clean:
-	$(POWERSHELL) -NoProfile -Command "Remove-Item -Force -ErrorAction SilentlyContinue *.o,*.lst,*.map,*.bin,*.ptp"
+	rm *.o,*.lst,*.map,*.bin,*.ptp"
