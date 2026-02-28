@@ -82,7 +82,7 @@ The game supports saving and restoring state. A snapshot packs `$0328` bytes of 
 
 Scoring follows the original *Colossal Cave Adventure* formula. Type `SCORE` at any point during the game to see your current standing.
 
-### Score Breakdown (maximum: 330 points)
+### Score Breakdown (maximum: 350 points)
 
 | Component | Points | Condition |
 |-----------|--------|-----------|
@@ -96,12 +96,20 @@ Scoring follows the original *Colossal Cave Adventure* formula. Type `SCORE` at 
 | Did not quit | +4 | Game ended without typing QUIT |
 | Deep cave reached | +25 | Entered a room with index ≥ 15 |
 | Cave closing | +25 | All 15 treasures returned to the building |
+| End-game BLAST | up to +45 | Type BLAST in the repository after cave closes |
 
-### Towards 350-Point Parity
+### End-Game Sequence
 
-The original game scores 350 points at perfect play. The remaining 20 points require the end-game sequence (cave repository section and the BLAST command), which has not yet been implemented in this port. See the original C source at [troglobit/adventure](https://github.com/troglobit/adventure) — specifically `turn.c` — for the full scoring reference.
+When all 15 treasures are deposited at the building, the cave *closes*: the player is teleported to the Repository (room 115) and the `closed` flag is set. From there, typing `BLAST` ends the game with a bonus of 10–45 points depending on the player's exact position and whether the black rod with a rusty star (ROD2) is present:
 
-### New Game State Variables (`$77B–$77F`)
+| Condition | Bonus |
+|-----------|-------|
+| Entered repository, did not BLAST | +10 |
+| BLAST in repository, room ≠ 115, ROD2 absent | +45 |
+| BLAST in room 115 (NE end), ROD2 absent | +30 |
+| BLAST with ROD2 present | +25 |
+
+### Game State Variables
 
 | Address | Name | Purpose |
 |---------|------|---------|
@@ -110,6 +118,8 @@ The original game scores 350 points at perfect play. The remaining 20 points req
 | `$77D` | `dflag` | Set to 1 once the deep cave is reached |
 | `$77E` | `tally` | Treasures not yet returned to the building |
 | `$77F` | `closing` | Set to 1 when the cave-closing event fires |
+| `$8AE` | `closed` | Set to 1 once the player is teleported to the repository |
+| `$8AF` | `bonus` | End-game bonus code: 0=none, 133=45 pts, 134=30 pts, 135=25 pts |
 
 ## Credits
 

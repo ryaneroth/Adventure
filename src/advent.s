@@ -65,6 +65,13 @@ gave_up    = $77C           ; 1 byte: 1 if player used QUIT, 0 if natural end
 dflag      = $77D           ; 1 byte: 1 once player reaches deep cave (room>=15)
 tally      = $77E           ; 1 byte: treasures not yet returned to building
 closing    = $77F           ; 1 byte: 1 if cave-closing sequence has triggered
+closed     = $8AE           ; 1 byte: 1 once player is teleported to the repository
+bonus      = $8AF           ; 1 byte: 0=no blast; 133=45pts, 134=30pts, 135=25pts
+lamp_life_lo = $8B0         ; 2 bytes: turns of lamp fuel remaining
+lamp_life_hi = $8B1
+lamp_warned  = $8B2         ; 1 byte: 1 once "lamp getting dim" warning shown
+ndwarves     = $8B3         ; 1 byte: active dwarf count (0-5; init'd when dflag fires)
+dfirst       = $8B4         ; 1 byte: 1 once first-encounter scene has played
 noun_buf = $730             ; 16-byte noun token buffer
 
 snapshot_base = $700        ; save/load snapshot base address
@@ -182,6 +189,17 @@ _initsuccess:
   sta closing
   lda #15
   sta tally
+  lda #0
+  sta closed
+  sta bonus
+  lda #$4A                 ; lamp_life = 330 ($014A)
+  sta lamp_life_lo
+  lda #$01
+  sta lamp_life_hi
+  lda #0
+  sta lamp_warned
+  sta ndwarves
+  sta dfirst
 
   lda #1
   sta target_room
@@ -201,6 +219,7 @@ turn_loop:
   ; Guard against cumulative stack drift across long play sessions.
   ldx #$ff
   txs
+  jsr per_turn_updates     ; lamp fuel, dwarf AI
 
   jsr sync_present_from_room
   jsr read_verb_id
@@ -412,12 +431,12 @@ _sr_spc2_drop_emerald:
   jmp _sr_dest_ok
 
 _sr_spc3_troll:
-  ; Adventure parity branch: if troll is already in "seen once" state,
-  ; crossing causes the troll to withdraw and no room change occurs.
   ldx #33                  ; TROLL
   lda prop_table,x
-  cmp #1
-  bne _sr_spc3_move
+  beq _sr_spc3_troll_block  ; prop=0: troll refuses to let you cross
+  cmp #2
+  beq _sr_spc3_bridge_gone  ; prop=2: bridge destroyed
+  ; prop=1: troll was bribed; withdraws as player crosses
   lda #0
   sta prop_table,x
   ldx #34                  ; TROLL2
@@ -428,7 +447,23 @@ _sr_spc3_troll:
   ldx #33                  ; TROLL
   lda #117
   sta place_table,x
-  jmp _sr_dest_ok
+  jmp _sr_spc3_move         ; allow crossing
+
+_sr_spc3_troll_block:
+  lda #160
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: jmp _sr_spc_fallback
+
+_sr_spc3_bridge_gone:
+  lda #161
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: jmp _sr_spc_fallback
 
 _sr_spc3_move:
   ; Normal crossing toggles side 117<->122.
@@ -449,16 +484,18 @@ _sr_spc3_chk122:
   lda #0
   sta dest_hi
 _sr_spc3_have_dest:
-  ; First crossing marks troll as active.
-  ldx #33                  ; TROLL
-  lda prop_table,x
-  bne _sr_spc3_check_bear
-  inc prop_table,x
 _sr_spc3_check_bear:
   ; Carrying the bear collapses bridge parity state.
   ldx #35                  ; BEAR
   lda toting_table,x
   beq _sr_spc3_finish_move
+  ; Bear lumbers at troll — troll flees (msg 163)
+  lda #163
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: ; Bridge collapses under the bear's weight (msg 162)
   lda #162
   sta msg_target
   jsr newline
@@ -505,6 +542,8 @@ _sr_dest_room_check:
   bcc _sr_dflag_done
   lda #1
   sta dflag
+  lda #5
+  sta ndwarves             ; 5 dwarves become active on first deep-cave entry
 _sr_dflag_done:
   jsr sync_present_from_room
   lda target_room
@@ -6693,8 +6732,9 @@ _eac_kill_have_obj:
   cmp #31                  ; DRAGON
   beq _eac_kill_dragon
   cmp #35                  ; BEAR
-  beq _eac_kill_bear
-  jmp _eac_no
+  bne :+
+  jmp _eac_kill_bear
+: jmp _eac_no
 _eac_kill_bird:
   jsr object_is_accessible
   bcs :+
@@ -6720,7 +6760,17 @@ _eac_kill_clam:
   sta msg_target
   jmp _eac_kill_print
 _eac_kill_dwarf:
-  lda #49
+  lda ndwarves
+  beq _ekdw_none
+  lda target_room
+  cmp #15
+  bcc _ekdw_none
+  dec ndwarves             ; kill one dwarf
+  lda #149                 ; "You killed a little Dwarf. The body vanished..."
+  sta msg_target
+  jmp _eac_kill_print
+_ekdw_none:
+  lda #12                  ; "I don't know how to apply that word here."
   sta msg_target
   jmp _eac_kill_print
 _eac_kill_troll:
@@ -6730,13 +6780,34 @@ _eac_kill_troll:
 _eac_kill_dragon:
   ldx #31
   lda prop_table,x
-  bne :+
-  lda #49
+  bne _ekd_already_dead
+  ; Dragon is alive — prompt bare-hands attempt
+  lda #49                  ; "With what? Your bare hands?"
   sta msg_target
-  jmp _eac_kill_print
-:
+  jsr print_special_message
+  bcs _ekd_done
+  jsr newline
+  jsr prompt_yes_no
+  php
+  jsr newline
+  plp
+  bcc _ekd_done            ; player said NO
+  ; YES — slay the dragon
+  ldx #31
+  lda #1
+  sta prop_table,x         ; dragon dead
+  lda #0
+  sta place_table,x        ; remove from world
+  sta present_table,x
+  ldx #<msg_dragon_slain
+  ldy #>msg_dragon_slain
+  jsr print_zstr_xy
+  jsr newline
+  rts
+_ekd_already_dead:
   lda #167
   sta msg_target
+_ekd_done:
   jmp _eac_kill_print
 _eac_kill_bear:
   lda #165
@@ -6780,6 +6851,32 @@ _eac_throw_check_axe:
   lda command_object
   cmp #28                  ; AXE special case
   beq _eac_throw_axe
+  ; Non-axe: if troll is present and object is a treasure (50..79), bribe him
+  ldx #33                  ; TROLL
+  lda present_table,x
+  beq _eac_throw_not_troll
+  lda command_object
+  cmp #50
+  bcc _eac_throw_not_troll
+  cmp #80
+  bcs _eac_throw_not_troll
+  ; Troll catches the treasure — remove it and mark troll as bribed
+  ldx command_object
+  lda #0
+  sta toting_table,x
+  sta present_table,x
+  sta place_table,x
+  ldx #33                  ; TROLL: prop=1 means bribed (player may now cross)
+  lda #1
+  sta prop_table,x
+  lda #159
+  sta msg_target
+  jsr print_special_message
+  bcc :+
+  rts
+: jsr newline
+  rts
+_eac_throw_not_troll:
   jmp _eac_drop
 _eac_throw_axe:
   ldx #31                  ; DRAGON
@@ -7006,6 +7103,45 @@ _eac_wake_print:
   rts
 
 _eac_blast:
+  lda closed
+  beq _eac_blast_generic          ; not in repository state — print generic msg
+  ; Determine bonus based on location and ROD2 presence
+  lda #133                        ; default: 45 pts (best outcome)
+  sta bonus
+  lda target_room
+  cmp #115
+  bne _eac_blast_check_rod2
+  lda #134                        ; at NE repository: 30 pts
+  sta bonus
+_eac_blast_check_rod2:
+  ldx #6
+  lda present_table,x             ; is ROD2 present here?
+  beq _eac_blast_do
+  lda #135                        ; ROD2 here: 25 pts (worst)
+  sta bonus
+_eac_blast_do:
+  lda bonus
+  cmp #134
+  beq _eac_blast_print_134
+  cmp #135
+  beq _eac_blast_print_135
+  ; bonus == 133
+  ldx #<msg_blast_133
+  ldy #>msg_blast_133
+  jmp _eac_blast_print
+_eac_blast_print_134:
+  ldx #<msg_blast_134
+  ldy #>msg_blast_134
+  jmp _eac_blast_print
+_eac_blast_print_135:
+  ldx #<msg_blast_135
+  ldy #>msg_blast_135
+_eac_blast_print:
+  jsr print_zstr_xy
+  jsr newline
+  jsr print_quit_summary
+  jmp halt_loop
+_eac_blast_generic:
   lda #67
   sta msg_target
   jmp _eac_verbmsg_print
@@ -7036,7 +7172,9 @@ _eac_nothing:
   jmp _eac_verbmsg_print
 
 _eac_brief:
-  lda #155
+  lda #1
+  sta desc_mode            ; switch to brief (short) descriptions
+  lda #156                 ; "Okay, from now on I'll only describe a place in full..."
   sta msg_target
   jmp _eac_verbmsg_print
 
@@ -7113,13 +7251,29 @@ _eac_verbmsg_print:
 
 trigger_closing:
   ; Called when all 15 treasures have been deposited at the building.
-  ; Sets the closing flag (+25 pts) and warns the player.
+  ; Sets the closing flag (+25 pts), warns the player, and teleports
+  ; them to the repository (room 115). Also sets closed for end-game BLAST.
   lda #1
   sta closing
+  sta closed
   ldx #<msg_cave_closing
   ldy #>msg_cave_closing
   jsr print_zstr_xy
   jsr newline
+  ldx #<msg_teleport
+  ldy #>msg_teleport
+  jsr print_zstr_xy
+  jsr newline
+  lda #115
+  sta target_room
+  jsr sync_present_from_room
+  lda #0
+  sta desc_mode               ; force long description
+  jsr print_room_long
+  jsr print_room_objects
+  ldx target_room
+  lda #1
+  sta visited_table,x
   rts
 
 player_death:
@@ -7315,6 +7469,31 @@ _cs_no_dflag_bonus:
   lda #25
   jsr score_add_a
 _cs_no_closing_bonus:
+  lda closed
+  beq _cs_done
+  ldx bonus
+  cpx #133
+  beq _cs_bonus_133
+  cpx #134
+  beq _cs_bonus_134
+  cpx #135
+  beq _cs_bonus_135
+  ; bonus == 0: +10 (entered repository but did not blast)
+  lda #10
+  jsr score_add_a
+  jmp _cs_done
+_cs_bonus_133:
+  lda #45
+  jsr score_add_a
+  jmp _cs_done
+_cs_bonus_134:
+  lda #30
+  jsr score_add_a
+  jmp _cs_done
+_cs_bonus_135:
+  lda #25
+  jsr score_add_a
+_cs_done:
   rts
 
 survival_table:
@@ -7327,6 +7506,132 @@ score_add_a:
   bcc :+
   inc work_hi
 :
+  rts
+
+; Attack-probability lookup: index = ndwarves (0-5), value = threshold (0-255)
+; pct_roll < threshold means a dwarf attacks this turn.
+_ptu_attack_thresh:
+  .byte 0, 50, 100, 150, 200, 250
+
+per_turn_updates:
+  ; ----------------------------------------------------------------
+  ; Lamp fuel countdown.
+  ; ----------------------------------------------------------------
+  ldx #2                   ; LAMP object
+  lda prop_table,x
+  beq _ptu_lamp_skip       ; lamp is off — no fuel consumed
+  ; Check if already dead
+  lda lamp_life_lo
+  ora lamp_life_hi
+  beq _ptu_lamp_dead
+  ; Decrement 16-bit lamp_life
+  lda lamp_life_lo
+  bne :+
+  dec lamp_life_hi
+: dec lamp_life_lo
+  ; Warn once when life drops to 30 or below
+  lda lamp_warned
+  bne _ptu_dead_check
+  lda lamp_life_hi
+  bne _ptu_dead_check      ; hi != 0 means life > 255, plenty left
+  lda lamp_life_lo
+  cmp #31
+  bcs _ptu_dead_check      ; life > 30, not yet
+  lda #183                 ; "Your lamp is getting dim..."
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: lda #1
+  sta lamp_warned
+  jmp _ptu_dead_check
+_ptu_lamp_dead:
+  ldx #2
+  lda #0
+  sta prop_table,x         ; lamp goes out
+  lda #184                 ; "Your lamp has run out of power."
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: jmp _ptu_lamp_skip
+_ptu_dead_check:
+  lda lamp_life_lo
+  ora lamp_life_hi
+  bne _ptu_lamp_skip
+  ldx #2
+  lda prop_table,x
+  beq _ptu_lamp_skip
+  jmp _ptu_lamp_dead
+_ptu_lamp_skip:
+  ; ----------------------------------------------------------------
+  ; Dwarf AI.
+  ; ----------------------------------------------------------------
+  lda ndwarves
+  bne :+
+  rts                      ; no active dwarves
+: lda target_room
+  cmp #15
+  bcs :+
+  rts                      ; not in deep cave, dwarves can't reach here
+:
+  jsr rng_next_byte        ; random 0-254
+  sta pct_roll
+  ; First-encounter scene: ~35% chance per turn (threshold 90/255)
+  lda dfirst
+  bne _ptu_dwarf_active
+  lda pct_roll
+  cmp #90
+  bcs _ptu_done            ; not this turn
+  lda #1
+  sta dfirst
+  lda #3                   ; "A little dwarf just walked around a corner..."
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: lda #5                   ; "One sharp, nasty knife is thrown at you!"
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: lda #6                   ; "None of them hit you!"
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: jmp _ptu_done
+_ptu_dwarf_active:
+  ; Attack if pct_roll < threshold for current dwarf count
+  ldx ndwarves
+  lda _ptu_attack_thresh,x
+  cmp pct_roll
+  bcc _ptu_done            ; pct_roll >= threshold — no attack this turn
+  ; A dwarf attacks!
+  lda #5                   ; "One sharp, nasty knife is thrown at you!"
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: ; Hit check: pct_roll < 38 (~15% of 255) means hit
+  lda pct_roll
+  cmp #38
+  bcs _ptu_miss
+  lda #7                   ; "One of them gets you!"
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: jsr player_death
+  jmp _ptu_done
+_ptu_miss:
+  lda #6                   ; "None of them hit you!"
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+:
+_ptu_done:
   rts
 
 save_game_snapshot:
@@ -9747,3 +10052,13 @@ msg_death:
   .asciiz "You are dead."
 msg_resurrect:
   .asciiz "Do you wish to be reincarnated?"
+msg_teleport:
+  .asciiz "The cave entrance collapses behind you. You find yourself in the repository."
+msg_blast_133:
+  .asciiz "There is a loud explosion, and you are suddenly engulfed in a blinding flash of light!"
+msg_blast_134:
+  .asciiz "There is a loud explosion, and a hole appears in the wall. You are engulfed in blinding light."
+msg_blast_135:
+  .asciiz "There is a loud explosion, and a nearby rod vibrates. The room shudders."
+msg_dragon_slain:
+  .asciiz "You slay the dragon with your bare hands! (Unbelievable, isn't it?)"
