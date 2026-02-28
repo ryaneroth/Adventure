@@ -560,8 +560,23 @@ _sr_first_visit:
   sta desc_mode
 _sr_print_desc:
   jsr newline
+  ; Dark room check: cave rooms (>=9) are dark unless lamp (obj 2) is on.
+  ldx #2
+  lda prop_table,x
+  bne _sr_lit              ; lamp on
+  lda target_room
+  cmp #9
+  bcc _sr_lit              ; rooms 1-8 are surface/lit
+  lda #16                  ; "It is now pitch dark..."
+  sta msg_target
+  jsr print_special_message
+  bcs _sr_desc_done
+  jsr newline
+  jmp _sr_desc_done
+_sr_lit:
   jsr print_room_long
   jsr print_room_objects
+_sr_desc_done:
   ldx target_room
   lda #1
   sta visited_table,x
@@ -616,6 +631,19 @@ _no_move_check_look:
   lda #0
   sta desc_mode
   jsr newline
+  ldx #2
+  lda prop_table,x
+  bne _no_move_look_lit
+  lda target_room
+  cmp #9
+  bcc _no_move_look_lit
+  lda #16
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: jmp turn_loop
+_no_move_look_lit:
   jsr print_room_long
   jsr print_room_objects
   jsr newline
@@ -5573,6 +5601,21 @@ _eac_take_in_range:
   bne _eac_take_present
   jmp _eac_take_not_here
 _eac_take_present:
+  ; Rug (obj 62) can't be taken while the dragon (obj 31) is alive.
+  txa
+  cmp #62
+  bne _eac_take_do
+  ldx #31
+  lda prop_table,x
+  bne _eac_take_do         ; dragon dead (prop != 0) — allow
+  lda #153                 ; "The dragon looks rather nasty."
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: rts
+_eac_take_do:
+  ldx command_object       ; restore X in case dragon check changed it
   lda #0
   sta present_table,x
   lda #1
@@ -5773,6 +5816,19 @@ _eac_look:
   lda #0
   sta desc_mode
   jsr newline
+  ldx #2
+  lda prop_table,x
+  bne _eac_look_lit
+  lda target_room
+  cmp #9
+  bcc _eac_look_lit
+  lda #16
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: rts
+_eac_look_lit:
   jsr print_room_long
   jsr print_room_objects
   jsr newline
@@ -7026,9 +7082,16 @@ _eac_feed_snake:
   jmp _eac_feed_print
 _eac_feed_snake_yes:
   lda #0
+  sta present_table,x      ; x=8 (BIRD) — bird used up charming snake
+  sta toting_table,x
+  sta place_table,x
+  ldx #11                  ; SNAKE — remove from world and mark as gone
+  lda #0
   sta present_table,x
   sta toting_table,x
   sta place_table,x
+  lda #1
+  sta prop_table,x          ; prop[snake]=1: snake charmed/gone (unblocks cond 311)
   lda #101
   sta msg_target
   jmp _eac_feed_print
@@ -7565,6 +7628,30 @@ score_add_a:
   rts
 
 ; ---------------------------------------------------------------------------
+; Dark room check: if lamp is off and player is underground (room >= 9),
+; there is a 25% chance per turn of falling into a pit (msg 23).
+; ---------------------------------------------------------------------------
+dark_room_check:
+  ldx #2                   ; LAMP
+  lda prop_table,x
+  bne _drc_done            ; lamp on — safe
+  lda target_room
+  cmp #9
+  bcc _drc_done            ; rooms 1-8 are surface/lit
+  ; Dark cave room — 25% chance of fatal pit fall
+  jsr rng_next_byte
+  cmp #64                  ; < 64/255 ≈ 25%
+  bcs _drc_done
+  lda #23                  ; "You fell into a pit and broke every bone in your body!"
+  sta msg_target
+  jsr print_special_message
+  bcs _drc_done
+  jsr newline
+  jsr player_death
+_drc_done:
+  rts
+
+; ---------------------------------------------------------------------------
 ; Pirate AI: each turn in deep cave, ~20% chance pirate appears.
 ; If player carries any treasure, he steals all of them (msg 128).
 ; If no treasure, he's spotted carrying chest and flees (msg 186).
@@ -7629,6 +7716,7 @@ _ptu_attack_thresh:
   .byte 0, 50, 100, 150, 200, 250
 
 per_turn_updates:
+  jsr dark_room_check      ; 25% pit-death chance in dark cave rooms
   jsr pirate_ai            ; check pirate encounter each turn
   ; ----------------------------------------------------------------
   ; Lamp fuel countdown.
