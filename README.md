@@ -63,7 +63,7 @@ Load `advent.ptp` using the KIM-1's paper tape interface or a compatible serial 
 
 ## SD Card Setup
 
-Format an SD card as FAT32 and copy the game data files to the root directory. The game reads location descriptions, travel tables, messages, and other data files at runtime.
+Format an SD card as FAT32 (partition type 0x0c) and copy the game data files to the root directory. The game reads location descriptions, travel tables, messages, and other data files at runtime.
 
 ## KIM-1 ROM Routines Used
 
@@ -76,7 +76,50 @@ Format an SD card as FAT32 and copy the game data files to the root directory. T
 
 ## Save / Restore
 
-The game supports saving and restoring state. A snapshot packs `$0328` bytes of game state into a staging buffer at `$2200` and writes it to the SD card.
+The game supports saving and restoring state. A snapshot packs `$0328` bytes of game state into a staging buffer at `$2200` and writes it to the SD card. All scoring state variables are within the snapshot range and are saved/restored automatically.
+
+## Scoring
+
+Scoring follows the original *Colossal Cave Adventure* formula. Type `SCORE` at any point during the game to see your current standing.
+
+### Score Breakdown (maximum: 350 points)
+
+| Component | Points | Condition |
+|-----------|--------|-----------|
+| Treasure located | +2 each | First time you find a treasure |
+| Treasure returned (standard) | +10 each | Objects 50–54 deposited at the building |
+| Treasure chest returned | +12 | Pirate's chest deposited at the building |
+| Treasure returned (special) | +14 each | Objects 56–64 deposited at the building |
+| Magazine at Witt's End | +1 | Magazine left at its original location |
+| Baseline | +2 | Always |
+| Survival | 10 × (3 − deaths) | Up to +30 for zero deaths |
+| Did not quit | +4 | Game ended without typing QUIT |
+| Deep cave reached | +25 | Entered a room with index ≥ 15 |
+| Cave closing | +25 | All 15 treasures returned to the building |
+| End-game BLAST | up to +45 | Type BLAST in the repository after cave closes |
+
+### End-Game Sequence
+
+When all 15 treasures are deposited at the building, the cave *closes*: the player is teleported to the Repository (room 115) and the `closed` flag is set. From there, typing `BLAST` ends the game with a bonus of 10–45 points depending on the player's exact position and whether the black rod with a rusty star (ROD2) is present:
+
+| Condition | Bonus |
+|-----------|-------|
+| Entered repository, did not BLAST | +10 |
+| BLAST in repository, room ≠ 115, ROD2 absent | +45 |
+| BLAST in room 115 (NE end), ROD2 absent | +30 |
+| BLAST with ROD2 present | +25 |
+
+### Game State Variables
+
+| Address | Name | Purpose |
+|---------|------|---------|
+| `$77B` | `num_deaths` | Number of times the player has died (0–3) |
+| `$77C` | `gave_up` | Set to 1 if the player used QUIT |
+| `$77D` | `dflag` | Set to 1 once the deep cave is reached |
+| `$77E` | `tally` | Treasures not yet returned to the building |
+| `$77F` | `closing` | Set to 1 when the cave-closing event fires |
+| `$8AE` | `closed` | Set to 1 once the player is teleported to the repository |
+| `$8AF` | `bonus` | End-game bonus code: 0=none, 133=45 pts, 134=30 pts, 135=25 pts |
 
 ## Credits
 
