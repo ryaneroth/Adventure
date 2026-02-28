@@ -72,6 +72,7 @@ lamp_life_hi = $8B1
 lamp_warned  = $8B2         ; 1 byte: 1 once "lamp getting dim" warning shown
 ndwarves     = $8B3         ; 1 byte: active dwarf count (0-5; init'd when dflag fires)
 dfirst       = $8B4         ; 1 byte: 1 once first-encounter scene has played
+pflag        = $8B5         ; 1 byte: 1 after pirate has stolen (won't steal again)
 noun_buf = $730             ; 16-byte noun token buffer
 
 snapshot_base = $700        ; save/load snapshot base address
@@ -200,6 +201,7 @@ _initsuccess:
   sta lamp_warned
   sta ndwarves
   sta dfirst
+  sta pflag
 
   lda #1
   sta target_room
@@ -6400,9 +6402,12 @@ _eac_drink_have_water:
 
 _eac_fill:
   lda command_object
+  cmp #2                   ; LAMP
+  beq _eac_fill_lamp
   cmp #58                  ; VASE
-  beq _eac_fill_vase
-  cmp #20
+  bne :+
+  jmp _eac_fill_vase
+: cmp #20
   beq _eac_fill_bottle
   lda #29
   sta msg_target
@@ -6441,6 +6446,57 @@ _eac_fill_bottle:
   ldy #>msg_fill_ok
   jsr print_zstr_xy
   jsr newline
+  rts
+
+_eac_fill_lamp:
+  ; Refuel lamp with fresh batteries (obj 39).
+  ; Batteries must be toted or present, and fresh (prop=0).
+  ldx #39
+  lda toting_table,x
+  bne _efl_have_bat
+  lda present_table,x
+  bne _efl_have_bat
+  ; No batteries available
+  lda #29
+  sta msg_target
+  jsr print_special_message
+  bcc :+
+  jmp _eac_no
+: jsr newline
+  rts
+_efl_have_bat:
+  ldx #39
+  lda prop_table,x
+  bne _efl_exhausted       ; prop=1 means used up
+  ; Fresh batteries: add 2500 turns ($09C4) to lamp_life
+  lda lamp_life_lo
+  clc
+  adc #$C4
+  sta lamp_life_lo
+  bcc :+
+  inc lamp_life_hi
+: lda lamp_life_hi
+  clc
+  adc #$09
+  sta lamp_life_hi
+  ldx #39
+  lda #1
+  sta prop_table,x         ; mark batteries as exhausted
+  lda #0
+  sta lamp_warned           ; reset dim warning
+  lda #188
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: rts
+_efl_exhausted:
+  lda #29
+  sta msg_target
+  jsr print_special_message
+  bcc :+
+  jmp _eac_no
+: jsr newline
   rts
 
 _eac_fill_vase:
@@ -7508,12 +7564,72 @@ score_add_a:
 :
   rts
 
+; ---------------------------------------------------------------------------
+; Pirate AI: each turn in deep cave, ~20% chance pirate appears.
+; If player carries any treasure, he steals all of them (msg 128).
+; If no treasure, he's spotted carrying chest and flees (msg 186).
+; pflag=1 after first theft — pirate won't steal again.
+; ---------------------------------------------------------------------------
+pirate_ai:
+  lda pflag
+  bne _pai_done            ; already stolen once
+  lda dflag
+  beq _pai_done            ; only active in deep cave
+  jsr rng_next_byte        ; random 0-254
+  cmp #50                  ; ~20% chance per turn
+  bcs _pai_done            ; not this turn
+  ; Scan for any carried treasure (obj 50..79)
+  ldx #50
+_pai_scan:
+  lda toting_table,x
+  bne _pai_steal
+  inx
+  cpx #80
+  bcc _pai_scan
+  ; No treasure — pirate spotted, flees with chest (msg 186)
+  lda #186
+  sta msg_target
+  jsr print_special_message
+  bcs _pai_done
+  jsr newline
+  jmp _pai_done
+_pai_steal:
+  ; Pirate pounces and steals all carried treasures → room 114 (msg 128)
+  lda #128
+  sta msg_target
+  jsr print_special_message
+  bcs :+
+  jsr newline
+: ldx #50
+_pai_take_loop:
+  lda toting_table,x
+  beq _pai_take_next
+  lda #0
+  sta toting_table,x
+  lda #114
+  sta place_table,x
+_pai_take_next:
+  inx
+  cpx #80
+  bcc _pai_take_loop
+  ; Place chest (obj 55) at room 114 (pirate's lair)
+  ldx #55
+  lda #114
+  sta place_table,x
+  lda #0
+  sta toting_table,x
+  lda #1
+  sta pflag                ; won't steal again
+_pai_done:
+  rts
+
 ; Attack-probability lookup: index = ndwarves (0-5), value = threshold (0-255)
 ; pct_roll < threshold means a dwarf attacks this turn.
 _ptu_attack_thresh:
   .byte 0, 50, 100, 150, 200, 250
 
 per_turn_updates:
+  jsr pirate_ai            ; check pirate encounter each turn
   ; ----------------------------------------------------------------
   ; Lamp fuel countdown.
   ; ----------------------------------------------------------------
@@ -8458,7 +8574,7 @@ _ipl_zero:
   lda #140
   sta place_table,x
   ldx #39
-  lda #0
+  lda #140                 ; BATTERIES start at machine room
   sta place_table,x
   ldx #40
   lda #96
