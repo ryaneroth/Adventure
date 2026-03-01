@@ -126,5 +126,5 @@ When all 15 treasures are deposited at the building, the cave *closes*: the play
 - Original *Colossal Cave Adventure* by Will Crowther and Don Woods
 - C source and game data files (`data/`) from [troglobit/adventure](https://github.com/troglobit/adventure)
 - SD card / FAT32 library: [ryaneroth/sdcard6502](https://github.com/ryaneroth/sdcard6502)
-- 6502 port and testing assisted by [OpenAI Codex](https://openai.com/codex)
+- 6502 port and testing assisted by [OpenAI Codex](https://openai.com/codex) and [Anthropic Claude](https://claude.ai)
 - 6502 port for the KIM-1 by Ryan Roth
