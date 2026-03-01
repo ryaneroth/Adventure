@@ -65,6 +65,8 @@ Load `advent.ptp` using the KIM-1's paper tape interface or a compatible serial 
 
 Format an SD card as FAT32 (partition type 0x0c) and copy the game data files to the root directory. The game reads location descriptions, travel tables, messages, and other data files at runtime.
 
+[sd.zip](https://github.com/ryaneroth/Adventure/blob/main/sd.zip) is a compressed disk image, created by dd, of a working SD card.
+
 ## KIM-1 ROM Routines Used
 
 | Label    | Address | Purpose              |
