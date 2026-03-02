@@ -9927,7 +9927,7 @@ _pones:
   .include "hwconfig.s"
   .include "../sdcard6502/src/libsd.s"
   .include "../sdcard6502/src/libfat32.s"
-  .include "libio.s"
+  .include "../sdcard6502/src/libio.s"
 
   .word reset
   .word $0000
