@@ -1,0 +1,3 @@
+[submodule "sdcard6502"]
+	path = sdcard6502
+	url = https://github.com/ryaneroth/sdcard6502.git
