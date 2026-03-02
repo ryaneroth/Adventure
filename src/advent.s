@@ -9925,8 +9925,8 @@ _pones:
   rts
 
   .include "hwconfig.s"
-  .include "libsd.s"
-  .include "libfat32.s"
+  .include "../sdcard6502/src/libsd.s"
+  .include "../sdcard6502/src/libfat32.s"
   .include "libio.s"
 
   .word reset
